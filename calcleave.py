@@ -52,6 +52,8 @@ for year in range(dfirstyear, dlastyear+1):
 		else:
 			calcholdaylist.append(datetime.datetime.strptime(holday + str(year), "%d%m%Y").date())
 	calcholdaylist.append(easter(year)- datetime.timedelta(days=2))
+	calcholdaylist.append(easter(year)+ datetime.timedelta(days=1))
+
 
 #holday = '1611'
 #print datetime.datetime.strptime(holday, "%d%m").date().day
@@ -64,7 +66,6 @@ WorkDays = []
 weekenddays = 0
 while True:
 	if tmpdate.weekday() not in (5,6): #If it not is a sunday or a saturday
-		weekenddays += 1
 		found = False
 		for holday in calcholdaylist:
 			if tmpdate == holday:
@@ -75,21 +76,23 @@ while True:
 		if not found:
 			WorkDays.append(tmpdate)
 			TotalWorkDays += 1
+		
+	else:
+		weekenddays += 1
 
 	if tmpdate == dlastday:
 		break;
-
 	tmpdate += datetime.timedelta(days=1)
 
 print ""
 print 'From %s to %s' % (dfirstday, dlastday)
-print 'Weekend days: %s' % (weekenddays)
-
 print 'Days: ' + str( dlastday - dfirstday)
+print 'Weekends: %s' % (weekenddays/2)
 print 'Work Days: ' + str(TotalWorkDays)
+for workday in WorkDays:
+  print '-'*2, workday
 print 'Holidays: ' + str(TotalHolidays)
 for holiday in FoundHolidays:
-	print '-'*2, holiday
+  print '-'*2, holiday
 print ''
- 
 
