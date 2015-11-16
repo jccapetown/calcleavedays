@@ -1,0 +1,3 @@
+# calcleavedays
+a small app to help me calculate the amount of leave days I need to put in during anual leave. It determines public holidays etc etc.
+...
