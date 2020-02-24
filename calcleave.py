@@ -16,14 +16,14 @@ def easter( year):
     day = f % 31 + 1    
     return date(year, month, day)
 
-#print easter(2016)
-#print easter(2016)- datetime.timedelta(days=2)
 
 if os.name == 'nt':
 	os.system('cls')
 else:
 	os.system('clear')
 
+#print easter(2020)
+#print easter(2020)- datetime.timedelta(days=2)
 #get the input between the two days
 sfirstday = raw_input('First Day (ddmmyyyy): ')
 slastday =  raw_input('Last Day  (ddmmyyyy): ') 
@@ -41,7 +41,18 @@ dlastday = datetime.datetime.strptime(slastday, "%d%m%Y").date()
 dlastyear = datetime.datetime.strptime(slastday, "%d%m%Y").date().year
 
 
-origholdaylist = ['0101', '2103', '2803', '2704', '0105', '1606', '0908', '2410', '1612', '2512', '2612']
+origholdaylist = ['0101', '2103', '2704', '0105', '1606', '1008', '2410', '1612', '2512', '2612']
+holidaynames={'0101' : "New Years", 
+             '2103' : 'Human Rights Day',
+             '2704' : 'Freedom Day',
+             '0105' : 'International Workers Day',
+             '1606' : 'Youth Day',
+             '1008' : "National Woman's Day",
+             '2410' : 'Heritage Day',
+             '1612' : 'Day Of Reconciliation',
+             '2512' : 'Christmas Day',
+             '2612' : 'Boxing Day'}
+
 calcholdaylist = []
 
 for year in range(dfirstyear, dlastyear+1):
@@ -51,14 +62,20 @@ for year in range(dfirstyear, dlastyear+1):
 			#print "Sunday %s moved to monday %s" % ( datetime.datetime.strptime(holday + str(year), "%d%m%Y").date(), datetime.datetime.strptime(holday + str(year), "%d%m%Y").date() + datetime.timedelta(days=1))
 		else:
 			calcholdaylist.append(datetime.datetime.strptime(holday + str(year), "%d%m%Y").date())
-	calcholdaylist.append(easter(year)- datetime.timedelta(days=2))
+	EasterFriday = easter(year)- datetime.timedelta(days=2)
+        holidaynames[EasterFriday.strftime("%d%m")] = 'Good Friday (Easter Friday)'
+        calcholdaylist.append(easter(year)- datetime.timedelta(days=2))
+	
+        EasterMonday = easter(year)+ datetime.timedelta(days=1)
+        holidaynames[EasterMonday.strftime("%d%m")] = 'Family Day (Easter Monday)'
 	calcholdaylist.append(easter(year)+ datetime.timedelta(days=1))
-
+        print holidaynames
 
 #holday = '1611'
 #print datetime.datetime.strptime(holday, "%d%m").date().day
 
 tmpdate = dfirstday
+print tmpdate.strftime('%A')
 TotalHolidays = 0
 FoundHolidays= []
 TotalWorkDays= 0
@@ -71,7 +88,8 @@ while True:
 			if tmpdate == holday:
 				found = True
 				TotalHolidays += 1
-				FoundHolidays.append(tmpdate)
+                                reworkhol = holday.strftime('%d%m')
+				FoundHolidays.append("%s - %s" % (tmpdate, holidaynames[reworkhol]) )
 				break;
 		if not found:
 			WorkDays.append(tmpdate)
@@ -90,7 +108,7 @@ print 'Days: ' + str( dlastday - dfirstday)
 print 'Weekends: %s' % (weekenddays/2)
 print 'Work Days: ' + str(TotalWorkDays)
 for workday in WorkDays:
-  print '-'*2, workday
+  print '-'*2, workday, "(",workday.strftime('%A'),")"
 print 'Holidays: ' + str(TotalHolidays)
 for holiday in FoundHolidays:
   print '-'*2, holiday
